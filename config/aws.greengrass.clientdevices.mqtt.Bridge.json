@@ -1,0 +1,14 @@
+{
+	"mqttTopicMapping": {
+		"LocalToIoTCoreMapping": {
+			"topic": "clients/+/sensor01",
+			"source": "LocalMqtt",
+			"target": "IotCore"
+		},
+		"IoTCoreToLocalMapping": {
+			"topic": "clients/general",
+			"source": "IotCore",
+			"target": "LocalMqtt"
+		}
+	}
+}
