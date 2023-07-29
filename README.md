@@ -13,6 +13,14 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 - 3x 220 ohm (pull-up resistors for LEDs)
 - breadboard and wires
 
+## Setup the hardware
+Use the following schematics to setup the hardware:
+- core device: provide power through the onboard USB-C port, no additional components
+- client devices
+    - provide power and serial connectivity through the onboard micro-USB port
+    - pub schematics: schematics/client_device_pub_schematics.png
+    - sub schematics: schematics/client_device_pub_schematics.png
+  
 ## Configure the Core device
 ### 1. Install Raspberry Pi OS
 1. Download and install the Raspberry Pi Imager for your OS from the official website (https://www.raspberrypi.com/software/);
@@ -88,10 +96,33 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
 ### 2. Configure the development environment on the local machine
 Install VS Code and Pymakr to execute code on a EPS32, directly from a Visual Studio app: https://docs.pycom.io/gettingstarted/software/vscode/
 
-### 3. Create AWS IoT things
+### 3. Create AWS IoT things and associate them with the core device
 For both publisher and subscriber:
-- create a thing in AWS IoT Core
 
-- download the certificates in the /flash folder and rename them
-- associate the thing with the core device
-- update wifi credentials in file
+1. Navigate to the AWS IoT console -> All devices -> Things and click Create things
+2. Choose Create single thing and click Next
+3. Enter Thing name and click Next
+- pub Thing name: MyClientDeviceESP32-01
+- sub Thing name: MyClientDeviceESP32-02
+
+4. Choose Auto-generate a new certificate and click Next
+5. Click Create thing (do not select/create a policy)
+6. Download certificates to the right folder and rename them:
+- pub:
+    - Amazon root: esp32-pub/flash/AmazonRootCA1.pem
+    - Device certificate: esp32-pub/flash/MyClientDeviceESP-01-certificate.pem.crt
+    - Private key: esp32-pub/flash/MyClientDeviceESP-01-private.pem.key
+    - Public key: esp32-pub/flash/MyClientDeviceESP-01-public.pem.key
+
+- sub:
+    - Amazon root: esp32-sub/flash/AmazonRootCA1.pem
+    - Device certificate: esp32-sub/flash/MyClientDeviceESP-02-certificate.pem.crt
+    - Private key: esp32-sub/flash/MyClientDeviceESP-02-private.pem.key
+    - Public key: esp32-sub/flash/MyClientDeviceESP-02-public.pem.key
+   
+7. Click Finish creating thing
+8. Navigate to Manage -> Greengrass devices -> Core devices and click MyGreengrassRPI
+9. Go to Client devices tab and record MQTT broker endpoint information (endpoint and port) for later use.
+10. Click Associate client devices
+11. Enter MyClientDeviceESP32-01 and MyClientDeviceESP32-01 for AWS IoT thing name. Click Add and then Associate.
+12. Update WiFi, MQTT and certificates in the configuration files (esp32-pub/config.py and esp32-sub/config.py)
