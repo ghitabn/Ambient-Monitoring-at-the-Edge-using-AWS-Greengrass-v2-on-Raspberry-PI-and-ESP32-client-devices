@@ -48,15 +48,19 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 1. From the AWS Management Console navigate to AWS IoT -> Greengrass Devices -> Core devices and select MyGreengrassRPI
 2. Select Client devices tab and click Configure cloud discovery
 3. Leave the step 1 and step 2 as they are and continue with the step 3: for each of the following components
-    - Client device auth - aws.greengrass.clientdevices.Auth: config/aws.greengrass.clientdevices.Auth.json
-    - MQTT 3.1.1 broker (Moquette) - aws.greengrass.clientdevices.mqtt.Moquette: config/aws.greengrass.clientdevices.mqtt.Moquette.json
-    - MQTT bridge - aws.greengrass.clientdevices.mqtt.Bridge: config/aws.greengrass.clientdevices.mqtt.Bridge.json
-    - IP detector - aws.greengrass.clientdevices.IPDetector): -
+   - Client device auth - aws.greengrass.clientdevices.Auth
+   - MQTT 3.1.1 broker (Moquette) - aws.greengrass.clientdevices.mqtt.Moquette
+   - MQTT bridge - aws.greengrass.clientdevices.mqtt.Bridge
+   - IP detector - aws.greengrass.clientdevices.IPDetector)
    
    execute the following update sequence:
    - select the component
    - choose Edit configuration
    - paste the configuration to merge (from the corresponding .json file)
+       - Client device auth: config/aws.greengrass.clientdevices.Auth.json
+       - MQTT 3.1.1 broker (Moquette): config/aws.greengrass.clientdevices.mqtt.Moquette.json
+       - MQTT bridge: config/aws.greengrass.clientdevices.mqtt.Bridge.json
+       - IP detector: no configuration to merge
    - press Confirm
 
 5. Click Review and deploy and choose Grant permissions
