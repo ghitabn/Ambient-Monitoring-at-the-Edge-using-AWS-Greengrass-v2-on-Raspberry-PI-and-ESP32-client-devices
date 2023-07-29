@@ -14,12 +14,12 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 - breadboard and wires
 
 ## Setup the hardware
-Use the following schematics to setup the hardware:
-- core device: provide power through the onboard USB-C port, no additional components
+- core device: provide power through the onboard USB-C port, no additional components required
 - client devices
     - provide power and serial connectivity through the onboard micro-USB port
-    - pub schematics: schematics/client_device_pub_schematics.png
-    - sub schematics: schematics/client_device_pub_schematics.png
+    - use the following schematics to setup additional hardware:
+        - pub schematics: schematics/client_device_pub_schematics.png
+        - sub schematics: schematics/client_device_pub_schematics.png
   
 ## Configure the Core device
 ### 1. Install Raspberry Pi OS
@@ -35,7 +35,7 @@ Use the following schematics to setup the hardware:
     - Save;
 6. Press Write and wait until the end of the write operation;
 7. Safely eject the flashed SD card from the laptop;
-8. Insert the SD card into the Raspberry Pi and power it up;
+8. Insert the SD card into the Raspberry Pi and power it up through the onboard USB-C port (no additional hardware components required);
 9. Test SSH connection from your laptop to the Raspberry Pi (use Putty or other SSH client).
 
 ### 2. Install the AWS IoT Greengrass Core software on Raspberry Pi
@@ -75,28 +75,7 @@ Use the following schematics to setup the hardware:
 6. Click Deploy
 
 ## Configure the client devices
-**Note.** The steps below are for a Windows local machine. Similar steps can be executed for Linux or MAC.
- 
-### 1. Flash the ESP32 with MicroPython firmware
-1. Install _CP210x USB to UART Bridge VCP Drivers_ on the local machine: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=overview
-2. Install Python 3.x: https://www.python.org/downloads/windows/
-3. Install _esptool_ and _MicroPython stubs_ (cmd or PowerShell):
-    pip install esptool
-    pip install -U  micropython-esp32-stubs
-4. Download the latest MycroPython firmware from: https://micropython.org/download/esp32/ (i.e. esp32-20220618-v1.19.1.bin)
-5. Identify the COM port in use by the ESP32 board, using Device Manager (i.e. COM4)
-6. Erase the flash (cmd or PowerShell):
-    python -m esptool --chip esp32 --port COM4 erase_flash
-7. Install the firmware (cmd or PowerShell):
-    python -m esptool --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-20220618-v1.19.1.bin
-
-**Note.** Depending on the ESP32 board, erasing/writing operations (steps 6 and 7 above) might require to manually put the board Firmware Download boot mode by long pressing the BOOT button.
-https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html
-
-### 2. Configure the development environment on the local machine
-Install VS Code and Pymakr to execute code on a EPS32, directly from a Visual Studio app: https://docs.pycom.io/gettingstarted/software/vscode/
-
-### 3. Create AWS IoT things and associate them with the core device
+### 1. Create AWS IoT things and associate them with the core device
 For both publisher and subscriber:
 
 1. Navigate to the AWS IoT console -> All devices -> Things and click Create things
@@ -126,3 +105,34 @@ For both publisher and subscriber:
 10. Click Associate client devices
 11. Enter MyClientDeviceESP32-01 and MyClientDeviceESP32-01 for AWS IoT thing name. Click Add and then Associate.
 12. Update WiFi, MQTT and certificates in the configuration files (esp32-pub/config.py and esp32-sub/config.py)
+
+### 2. Flash the ESP32 with MicroPython firmware
+**Note.** The steps below are specific to a Windows local machine. Similar steps can be executed for Linux or MAC.
+1. Install _CP210x USB to UART Bridge VCP Drivers_ on the local machine: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=overview
+2. Install Python 3.x: https://www.python.org/downloads/windows/
+3. Install _esptool_ and _MicroPython stubs_ (cmd or PowerShell):
+    pip install esptool
+    pip install -U  micropython-esp32-stubs
+4. Download the latest MycroPython firmware from: https://micropython.org/download/esp32/ (i.e. esp32-20220618-v1.19.1.bin)
+5. Identify the COM port in use by the ESP32 board, using Device Manager (i.e. COM4)
+6. Erase the flash (cmd or PowerShell):
+    python -m esptool --chip esp32 --port COM4 erase_flash
+7. Install the firmware (cmd or PowerShell):
+    python -m esptool --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-20220618-v1.19.1.bin
+**Note.** Depending on the ESP32 board, erasing/writing operations (steps 6 and 7 above) might require to manually put the board Firmware Download boot mode by long pressing the BOOT button.
+https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html
+
+### 3. Configure the development environment on the local machine and upload the code to client devices
+1. Install VS Code and Pymakr to execute code on a EPS32, directly from a Visual Studio app: https://docs.pycom.io/gettingstarted/software/vscode/
+2. Upload the code to client devices:
+   - code for the publisher: esp-32-pub
+   - code for the subscriber: esp-32-sub
+
+### 4. Test communication
+1. Power on the core and client devices
+2. Use putty to establish connections:
+   - ssh to the core device
+   - serial to each client device
+3. Check local communication in the serial consoles for publisher and subscriber through the configured MQTT topic (clients/MyClientDeviceESP-01/sensor01)
+4. Use AWS IoT MQTT test client to test subscription to the configured topic (clients/MyClientDeviceESP-01/sensor01)   
+     
