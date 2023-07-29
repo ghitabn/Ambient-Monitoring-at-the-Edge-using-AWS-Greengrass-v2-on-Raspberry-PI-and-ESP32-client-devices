@@ -65,3 +65,33 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 
 5. Click Review and deploy and choose Grant permissions
 6. Click Deploy
+
+## Configure the client devices
+**Note.** The steps below are for a Windows local machine. Similar steps can be executed for Linux or MAC.
+ 
+### 1. Flash the ESP32 with MicroPython firmware
+1. Install _CP210x USB to UART Bridge VCP Drivers_ on the local machine: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=overview
+2. Install Python 3.x: https://www.python.org/downloads/windows/
+3. Install _esptool_ and _MicroPython stubs_ (cmd or PowerShell):
+    pip install esptool
+    pip install -U  micropython-esp32-stubs
+4. Download the latest MycroPython firmware from: https://micropython.org/download/esp32/ (i.e. esp32-20220618-v1.19.1.bin)
+5. Identify the COM port in use by the ESP32 board, using Device Manager (i.e. COM4)
+6. Erase the flash (cmd or PowerShell):
+    python -m esptool --chip esp32 --port COM4 erase_flash
+7. Install the firmware (cmd or PowerShell):
+    python -m esptool --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-20220618-v1.19.1.bin
+
+**Note.** Depending on the ESP32 board, erasing/writing operations (steps 6 and 7 above) might require to manually put the board Firmware Download boot mode by long pressing the BOOT button.
+https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html
+
+### 2. Configure the development environment on the local machine
+Install VS Code and Pymakr to execute code on a EPS32, directly from a Visual Studio app: https://docs.pycom.io/gettingstarted/software/vscode/
+
+### 3. Create AWS IoT things
+For both publisher and subscriber:
+- create a thing in AWS IoT Core
+
+- download the certificates in the /flash folder and rename them
+- associate the thing with the core device
+- update wifi credentials in file
