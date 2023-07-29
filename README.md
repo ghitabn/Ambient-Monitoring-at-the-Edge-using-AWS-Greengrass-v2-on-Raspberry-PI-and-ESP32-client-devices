@@ -1,7 +1,9 @@
 # Ambient-Monitoring-at-the-Edge
 Ambiental telemetry (temperature and humidity) at the edge using AWS Greengrass v2 on Raspberry PI and ESP32 client devices (MicroPython).
 
-The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32): a publisher and a subscriber. Telemetry data collected by the publisher from a local sensor is available for local subscriber(s) and uploaded to AWS IoT Core (subject to uplink connectivity) for further processing and visualization, if needed.
+The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32): a publisher and a subscriber. Telemetry data collected by the publisher from a local sensor is available through an MQTT topic to:
+- local subscriber(s) for signaling and/or local control (i.e. interfacing and controlling a local HVAC system);
+- AWS IoT Core (subject to uplink connectivity) for further processing and visualization.
 
 ## Hardware:
 - 1x Raspberry Pi 4B 4GB (core device) ()
