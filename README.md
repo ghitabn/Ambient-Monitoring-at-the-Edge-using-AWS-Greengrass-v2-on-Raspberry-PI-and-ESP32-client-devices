@@ -188,3 +188,17 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
        - Select sensors.humidity, sensors.temperature and RealTime
    - Click on Next
    - Click Create pipeline
+
+5. Create a Dataset
+   - Navigate to IoT Analytics dashboard -> click on Datasets -> Create a Dataset
+   - Select Create SQL
+   - Dataset name: iotsensordataset
+   - Data store source: iotsensordatastore
+   - Click Next
+   - SQL Statement: SELECT * FROM iotsensordatastore
+   - Click Next
+   - Click Next on the "Data Selection Filter"
+   - Schedule: Select Every 1 minute
+   - "Configure the results of your dataset": leave the defaults and click Next
+   - "Configure dataset content delivery rules - optional": leave the defaults and click Next
+   - Click Create data set
