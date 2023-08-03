@@ -1,14 +1,12 @@
 # Ambient-Monitoring-at-the-Edge
 Ambiental telemetry (temperature and humidity) at the edge using AWS Greengrass v2 on Raspberry PI and ESP32 client devices (MicroPython).
 
-The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32): a publisher and a subscriber. Telemetry data collected by the publisher from a local sensor is available through an MQTT topic to:
-- local subscriber(s) for signaling and/or local control (i.e. interfacing and controlling a local HVAC system);
-- AWS IoT Core (subject to uplink connectivity) for further processing and visualization.
+The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32): a publisher and a subscriber. Telemetry data collected by the publisher from an attached sensor is made available to the subscriber for signaling and/or local control (i.e. interfacing and controlling a local HVAC system) and relayed to AWS IoT Core for further processing and visualization.
 
 ## Hardware:
-- 1x Raspberry Pi 4B 4GB (core device) ()
-- 2x DOIT ESP32 DEVKIT V1 (client devices) ()
-- 1x DHT11 (temperature and humidity sensor)
+- 1x Raspberry Pi 4B 4GB (core device) (https://www.amazon.ca/gp/product/B07TC2BK1X/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
+- 2x DOIT ESP32 DEVKIT V1 (client devices) (https://www.amazon.ca/KeeYees-Development-Bluetooth-Microcontroller-ESP-WROOM-32/dp/B07QCP2451/ref=sr_1_6?crid=FRGCA0U4QLA6&keywords=DOIT%2BESP32%2BDEVKIT%2BV1&qid=1691051640&s=electronics&sprefix=doit%2Besp32%2Bdevkit%2Bv1%2Celectronics%2C78&sr=1-6&th=1)
+- 1x DHT11 (temperature and humidity sensor) (https://www.amazon.ca/CANADUINO-Temperature-Humidity-Sensor-DHT11-16bit/dp/B075CNS7PS/ref=sr_1_4?keywords=dht11+sensor&qid=1691051489&s=electronics&sprefix=dht11%2Celectronics%2C108&sr=1-4)
 - 3x LED (signaling)
 - 3x 220 ohm (pull-up resistors for LEDs)
 - breadboard and wires
@@ -17,7 +15,7 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 - core device: provide power through the onboard USB-C port, no additional components required
 - client devices
     - provide power and serial connectivity through the onboard micro-USB port
-    - use the following schematics to setup additional hardware:
+    - use the following schematics to interconnect additional hardware:
         - pub schematics: schematics/client_device_pub_schematics.png
         - sub schematics: schematics/client_device_pub_schematics.png
   
