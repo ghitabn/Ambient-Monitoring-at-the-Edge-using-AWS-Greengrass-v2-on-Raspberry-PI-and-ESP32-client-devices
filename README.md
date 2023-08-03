@@ -126,7 +126,7 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - code for the publisher: esp-32-pub
    - code for the subscriber: esp-32-sub
 
-### 4. Test communication
+## Test MQTT communication between client devices and relay to AWS IoT Core
 1. Power on the core and client devices
 2. Use putty to establish connections:
    - ssh to the core device
@@ -134,3 +134,57 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
 3. Check local communication in the serial consoles for publisher and subscriber through the configured MQTT topic (clients/MyClientDeviceESP-01/sensor01)
 4. Use AWS IoT MQTT test client to test subscription to the configured topic (clients/MyClientDeviceESP-01/sensor01)   
      
+## Configure IoT Analytics
+### 1. Create a channel in IoT Analytics
+1. Navigate to the AWS IoT Analytics console -> Click on Channels -> Click on Create channel -> CreateChannel
+   - Channel name: sensorchannel
+   - Select the "Service-managed Store"
+   - Set the "Choose how long to store your raw data" option to "Specified time period"
+   - Data Retention: 5 days
+   - Click on Next
+   - IoT Core Topic Filter: clients/MyClientDeviceESP-01/sensor01
+   - IAM role name: Create new
+   - Rule Name: IoTAnalyticsSensorRole
+   - Click on Create Role
+   - Click on Next
+   - Click on Create Channel
+   - Verify the rule IoTAnalytics_sensorchannel has been succesfully created in AWS IoT -> Manage -> Message routing -> Rules in your AWS console
+2. Add timestamp to the streaming data
+   - Navigate to AWS IoT -> Manage -> Message routing -> Rules in your AWS console
+   - Click on the rule IoTAnalytics_sensorchannel
+   - Click edit in the top right hand corner
+   - Change the SQL statement from
+         SELECT * FROM 'clients/MyClientDeviceESP-01/sensor01'
+         to
+         SELECT *, parse_time("yyyy-MM-dd'T'HH:mm:ss.SSSZ", timestamp()) as RealTime FROM 'clients/MyClientDeviceESP-01/sensor01'
+    - Click Update
+
+3. Create a Datastore
+   - Navigate to IoT Analytics dashboard -> click on Data stores -> Create a data store
+   - Data store ID: iotsensordatastore
+   - Click on Next
+   - Select the "Service-managed Store"
+   - Set the "Configure how long you want to keep your processed data" option to "Specified time period"
+   - Data Retention: 5 days
+   - Click on Next
+   - Keep the default and click on Next on the Choose data format screen
+   - Keep the default and click on Next on the Add data partitions - optional screen
+   - Click on Create data store
+
+4. Create a Pipeline
+   - Navigate to IoT Analytics dashboard -> click on Pipelines -> Create a pipeline
+   - Pipeline name: iotsensorpipeline
+   - Pipeline source: sensorchannel
+   - Pipeline output: iotsensordatastore
+   - Click Next
+   - Click Next, to get to the Pipeline Activities section.
+     **Note.** On this page, we will add a new calculated attribute to the data (temperature in Fahrenheit).
+   - Click the drop-down menu and choose Calculate a message attribute and click Add.
+   - Under Calculate a message attribute:
+       - Attribute name: sensors.temperature_f
+       - Formula: sensors.temperature * 9/5 + 32
+       - Click Update Preview to see a preview.
+   - Click the drop-down menu and choose Select message attributes and click Add.
+       - Select sensors.humidity, sensors.temperature and RealTime
+   - Click on Next
+   - Click Create pipeline
