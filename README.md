@@ -3,6 +3,9 @@ Ambiental telemetry (temperature and humidity) at the edge using AWS Greengrass 
 
 The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32): a publisher and a subscriber. Telemetry data collected by the publisher from an attached sensor is made available to the subscriber for signaling and/or local control (i.e. interfacing and controlling a local HVAC system) and relayed to AWS IoT Core for further processing and visualization.
 
+## AWS Architecture diagram
+diagrams/architecture/architecture_diagram_aws.png
+
 ## Hardware:
 - 1x Raspberry Pi 4B 4GB (core device) (https://www.amazon.ca/gp/product/B07TC2BK1X/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
 - 2x DOIT ESP32 DEVKIT V1 (client devices) (https://www.amazon.ca/KeeYees-Development-Bluetooth-Microcontroller-ESP-WROOM-32/dp/B07QCP2451/ref=sr_1_6?crid=FRGCA0U4QLA6&keywords=DOIT%2BESP32%2BDEVKIT%2BV1&qid=1691051640&s=electronics&sprefix=doit%2Besp32%2Bdevkit%2Bv1%2Celectronics%2C78&sr=1-6&th=1)
@@ -16,8 +19,8 @@ The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which
 - client devices
     - provide power and serial connectivity through the onboard micro-USB port
     - use the following schematics to interconnect additional hardware:
-        - pub schematics: schematics/client_device_pub_schematics.png
-        - sub schematics: schematics/client_device_pub_schematics.png
+        - pub schematics: diagrams/schematics/client_device_pub_schematics.png
+        - sub schematics: diagrams/schematics/client_device_pub_schematics.png
   
 ## Configure the Core device
 ### 1. Install Raspberry Pi OS
