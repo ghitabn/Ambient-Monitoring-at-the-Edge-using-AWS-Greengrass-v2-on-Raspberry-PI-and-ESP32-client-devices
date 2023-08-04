@@ -240,3 +240,27 @@ Automated refresh (based on schedule)
 - Occurence: Daily
 - Start time: 23:59
 - Timezone: America/Toronto
+
+## SNS Notifications
+1. Creating a new SNS topic
+   - Navigate to Amazon SNS console
+   - Click Create topic
+       - Type: Standard
+       - Name: iotsensorsnstopic
+   - Record the ARN for the new topic for next step
+2. Create a new IoT rule
+   - Navigate to the AWS IoT core dashboard -> Message routing -> Rules
+   - Click on Create rule
+       - Rule name: sns_notification_sensor
+       - SQL Statement:
+            SELECT sensors.temperature, sensors.humidity FROM 'clients/MyClientDeviceESP-01/sensor01' WHERE sensors.temperature > 35 OR sensors.humidity > 95
+        - Rule actions: Select Simple Notification Service (SNS)
+        - SNS topic: select the ARN for the topic created in the previous step
+        - Message format: RAW
+        - IAM role:
+            - Click on Create new role
+                - Name: iotsensorsnsrole
+                - Permissions: AmazonSNSFullAccess
+        - Click on Next
+        - Click on Create
+3. Create a subscription to the SNS topic and test SNS notifications
