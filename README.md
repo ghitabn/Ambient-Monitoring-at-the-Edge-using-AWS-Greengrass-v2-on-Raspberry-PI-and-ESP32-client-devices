@@ -202,3 +202,38 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - "Configure the results of your dataset": leave the defaults and click Next
    - "Configure dataset content delivery rules - optional": leave the defaults and click Next
    - Click Create data set
+
+## Create visuals inQuickSight
+### 1. Setup the dataset
+   - Navigate to the QuickSight dashboard and select the us-east-2 region
+   - Click on Datasets
+   - Click on New dataset
+   - Select IoT Analytics
+   - Select the IoT Analytics dataset previously created (iotsensordataset)
+   - Click Create data source
+   - Click Visualize
+   - Ensure Interactive sheet is selected and click Create
+### 2. Create visuals
+   - Crete the following visuals:
+   - Average of Temperature by RealTime:
+       - X axis: realtime (SECOND)
+       - Y axis: temperature (Average)
+   - Average of Humidity by RealTime:
+       - X axis: realtime (SECOND)
+       - Y axisL humidity (Average)
+   - Average of Temperature_f by RealTime:
+       - X axis: realtime (SECOND)
+       - Y axisL temperature (Average)
+### 3. Refresh QuickSight data
+   - Manual refresh:
+       - Navigate to the QuickSight console
+       - Click on Datasets
+       - Click on the dataset iotsensordataset
+       - Click on the Refresh tab
+       - Click REFRESH NOW to refresh your dataset
+
+Automated refresh (based on schedule)
+- Click on Add new schedule
+- Occurence: Daily
+- Start time: 23:59
+- Timezone: America/Toronto
