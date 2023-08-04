@@ -1,28 +1,28 @@
-[1.Description](#1)<br>
-[2.AWS Architecture diagram](#2)<br>
-[3.Hardware](#3)<br>
-[4.Steps](#4)<br>
-[4.1.Setup hardware](#41)<br>
-[4.2.Configure the core device](#42)<br>
-[4.2.1.Install Raspberry Pi OS](#421)<br>
-[4.2.2.Install the AWS IoT Greengrass Core software](#422)<br>
-[4.2.3.Deploy Greengrass V2 components for client devices](#423)<br>
-[4.3.Configure client devices (ESP32s)](#43)<br>
-[4.3.1.Create AWS IoT things and associate them with the core device](#431)<br>
-[4.3.2.Flash the ESP32 with MicroPython firmware](#432)<br>
-[4.3.3.Configure the development environment on the local machine and upload the code to client devices](#433)<br>
-[4.4.Test MQTT communication between client devices and relay to AWS IoT Core](#44)<br>
-[4.5.Configure IoT Analytics](#45)<br>
-[4.5.1.Create a channel in IoT Analytics](#451)<br>
-[4.5.2.Add timestamp to the streaming data](#452)<br>
-[4.5.3.Create a Datastore](#453)<br>
-[4.5.4.Create a Pipeline](#454)<br>
-[4.5.5.Create a Dataset](#455)<br>
-[4.6.Create visuals in QuickSight](#46)<br>
-[4.6.1.Setup the dataset](#461)<br>
-[4.6.2.Create visuals](#462)<br>
-[4.6.3.Refresh QuickSight data](#463)<br>
-[4.7.SNS Notifications](#47)<br> 
+[1. Description](#1)<br>
+[2. AWS Architecture diagram](#2)<br>
+[3. Hardware](#3)<br>
+[4. Steps](#4)<br>
+[4.1. Setup hardware](#41)<br>
+[4.2. Configure the core device](#42)<br>
+[4.2.1. Install Raspberry Pi OS](#421)<br>
+[4.2.2. Install the AWS IoT Greengrass Core software](#422)<br>
+[4.2.3. Deploy Greengrass V2 components for client devices](#423)<br>
+[4.3. Configure client devices (ESP32s)](#43)<br>
+[4.3.1. Create AWS IoT things and associate them with the core device](#431)<br>
+[4.3.2. Flash the ESP32 with MicroPython firmware](#432)<br>
+[4.3.3. Configure the development environment on the local machine and upload the code to client devices](#433)<br>
+[4.4. Test MQTT communication between client devices and relay to AWS IoT Core](#44)<br>
+[4.5. Configure IoT Analytics](#45)<br>
+[4.5.1. Create a channel in IoT Analytics](#451)<br>
+[4.5.2. Add timestamp to the streaming data](#452)<br>
+[4.5.3. Create a Datastore](#453)<br>
+[4.5.4. Create a Pipeline](#454)<br>
+[4.5.5. Create a Dataset](#455)<br>
+[4.6. Create visuals in QuickSight](#46)<br>
+[4.6.1. Setup the dataset](#461)<br>
+[4.6.2. Create visuals](#462)<br>
+[4.6.3. Refresh QuickSight data](#463)<br>
+[4.7. SNS Notifications](#47)<br> 
 <a name="1"></a>
 # 1. Description
 The project uses a Raspberry Pi running AWS Greengrass v2 as a core device which extends AWS IoT Core functionnality at the edge. It allows MQTT communication between two client devices (ESP32 running MicroPython firmware): a publisher and a subscriber. Telemetry data (temperature and humidity) is collected by the publisher from an attached sensor. It is available to the subscriber(s) for signaling and/or local control (i.e. interfacing and controlling a local HVAC system) and relayed to AWS IoT Core for further processing and visualization. SNS notifications can be used for alerting purposes.
