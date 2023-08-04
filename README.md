@@ -40,16 +40,18 @@ The AWS architecture diagram is available in the following location: diagrams/ar
 - breadboard and wires
 <a name="4"></a>
 # 4. Steps
-## Setup hardware
+<a name="41"></a>
+## 4.1. Setup hardware
 - core device: provide power through the onboard USB-C port, no additional components required
 - client devices
     - provide power and serial connectivity through the onboard micro-USB port
     - use the following schematics to interconnect additional hardware:
         - pub schematics: diagrams/schematics/client_device_pub_schematics.png
         - sub schematics: diagrams/schematics/client_device_pub_schematics.png
-  
-## Configure the core device
-### 1. Install Raspberry Pi OS
+<a name="42"></a>  
+## 4.2. Configure the core device
+<a name="421"></a>
+### 4.2.1. Install Raspberry Pi OS
 1. Download and install the Raspberry Pi Imager for your OS from the official website (https://www.raspberrypi.com/software/);
 2. Insert the SD card into your laptop (use an adapter if needed) and launch the software;
 3. Select the Operating System to install: Raspberry Pi OS (use a 64-bit version for newest ARM chips);
@@ -64,7 +66,8 @@ The AWS architecture diagram is available in the following location: diagrams/ar
 7. Safely eject the flashed SD card from the laptop;
 8. Insert the SD card into the Raspberry Pi and power it up through the onboard USB-C port (no additional hardware components required);
 9. Test SSH connection from your laptop to the Raspberry Pi (use Putty or other SSH client).
-### 2. Install the AWS IoT Greengrass Core software
+<a name="422"></a>
+### 4.2.2. Install the AWS IoT Greengrass Core software
 1. Set up an AWS account: https://docs.aws.amazon.com/greengrass/v2/developerguide/getting-started-set-up-aws-account.html
 2. Set up the environment: https://docs.aws.amazon.com/greengrass/v2/developerguide/getting-started-set-up-environment.html, section "Set up a Linux device (Raspberry Pi)" only
 3. Create an IAM policy:
@@ -77,7 +80,8 @@ The AWS architecture diagram is available in the following location: diagrams/ar
    - use the access keys saved in the previous step for the user RPIGG2User
    - core device name: MyGreengrassRPI
    - thing group name: MyGreengrassGroup
-### 3. Deploy Greengrass V2 components for client devices
+<a name="423"></a>
+### 4.2.3. Deploy Greengrass V2 components for client devices
 1. From the AWS Management Console navigate to AWS IoT -> Greengrass Devices -> Core devices and select MyGreengrassRPI
 2. Select Client devices tab and click Configure cloud discovery
 3. Leave the step 1 and step 2 as they are and continue with the step 3: for each of the components below
@@ -98,8 +102,10 @@ The AWS architecture diagram is available in the following location: diagrams/ar
 
 5. Click Review and deploy and choose Grant permissions
 6. Click Deploy
-## Configure client devices (ESP32s)
-### 1. Create AWS IoT things and associate them with the core device
+<a name="43"></a>
+## 4.3. Configure client devices (ESP32s)
+<a name="431"></a>
+### 4.3.1. Create AWS IoT things and associate them with the core device
 For each client device (publisher and subscriber):
 1. Navigate to the AWS IoT console -> All devices -> Things and click Create things
 2. Choose Create single thing and click Next
@@ -125,7 +131,8 @@ For each client device (publisher and subscriber):
 10. Click Associate client devices
 11. Enter MyClientDeviceESP32-01 and MyClientDeviceESP32-01 for AWS IoT thing name. Click Add and then Associate.
 12. Update WiFi, MQTT and certificates in the configuration files (esp32-pub/config.py and esp32-sub/config.py)
-### 2. Flash the ESP32 with MicroPython firmware
+<a name="432"></a>
+### 4.3.2. Flash the ESP32 with MicroPython firmware
 **Note.** The steps below are specific to a Windows local machine. Similar steps can be executed for Linux or MAC.
 1. Install _CP210x USB to UART Bridge VCP Drivers_ on the local machine: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=overview
 2. Install Python 3.x: https://www.python.org/downloads/windows/
@@ -140,20 +147,24 @@ For each client device (publisher and subscriber):
     python -m esptool --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-20220618-v1.19.1.bin
 **Note.** Depending on the ESP32 board, erasing/writing operations (steps 6 and 7 above) might require to manually put the board Firmware Download boot mode by long pressing the BOOT button.
 https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html
-### 3. Configure the development environment on the local machine and upload the code to client devices
+<a name="433"></a>
+### 4.3.3. Configure the development environment on the local machine and upload the code to client devices
 1. Install VS Code and Pymakr to execute code on a EPS32, directly from a Visual Studio app: https://docs.pycom.io/gettingstarted/software/vscode/
 2. Upload the code to client devices:
    - code for the publisher: esp-32-pub
    - code for the subscriber: esp-32-sub
-## Test MQTT communication between client devices and relay to AWS IoT Core
+<a name="44"></a>
+## 4.4. Test MQTT communication between client devices and relay to AWS IoT Core
 1. Power on the core and client devices
 2. Use putty to establish connections:
    - ssh to the core device
    - serial to each client device
 3. Check local communication in the serial consoles for publisher and subscriber through the configured MQTT topic (clients/MyClientDeviceESP-01/sensor01)
 4. Use AWS IoT MQTT test client to test subscription to the configured topic (clients/MyClientDeviceESP-01/sensor01)   
-## Configure IoT Analytics
-### 1. Create a channel in IoT Analytics
+<a name="45"></a>
+## 4.5. Configure IoT Analytics
+<a name="451"></a>
+### 4.5.1. Create a channel in IoT Analytics
    - Navigate to the AWS IoT Analytics console -> Click on Channels -> Click on Create channel -> CreateChannel 
    - Channel name: sensorchannel
    - Select the "Service-managed Store"
@@ -167,7 +178,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - Click on Next
    - Click on Create Channel
    - Verify the rule IoTAnalytics_sensorchannel has been succesfully created in AWS IoT -> Manage -> Message routing -> Rules in your AWS console
-### 2. Add timestamp to the streaming data
+<a name="452"></a>
+### 4.5.2. Add timestamp to the streaming data
    - Navigate to AWS IoT -> Manage -> Message routing -> Rules in your AWS console
    - Click on the rule IoTAnalytics_sensorchannel
    - Click edit in the top right hand corner
@@ -176,7 +188,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
          to
          SELECT *, parse_time("yyyy-MM-dd'T'HH:mm:ss.SSSZ", timestamp()) as RealTime FROM 'clients/MyClientDeviceESP-01/sensor01'
     - Click Update
-### 3. Create a Datastore
+<a name="453"></a>
+### 4.5.3. Create a Datastore
    - Navigate to IoT Analytics dashboard -> click on Data stores -> Create a data store
    - Data store ID: iotsensordatastore
    - Click on Next
@@ -187,7 +200,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - Keep the default and click on Next on the Choose data format screen
    - Keep the default and click on Next on the Add data partitions - optional screen
    - Click on Create data store
-### 4. Create a Pipeline
+<a name="454"></a>
+### 4.5.4. Create a Pipeline
    - Navigate to IoT Analytics dashboard -> click on Pipelines -> Create a pipeline
    - Pipeline name: iotsensorpipeline
    - Pipeline source: sensorchannel
@@ -204,7 +218,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
        - Select sensors.humidity, sensors.temperature and RealTime
    - Click on Next
    - Click Create pipeline
-### 5. Create a Dataset
+<a name="455"></a>
+### 4.5.5. Create a Dataset
    - Navigate to IoT Analytics dashboard -> click on Datasets -> Create a Dataset
    - Select Create SQL
    - Dataset name: iotsensordataset
@@ -217,8 +232,10 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - "Configure the results of your dataset": leave the defaults and click Next
    - "Configure dataset content delivery rules - optional": leave the defaults and click Next
    - Click Create data set
-## Create visuals in QuickSight
-### 1. Setup the dataset
+<a name="46"></a>
+## 4.6. Create visuals in QuickSight
+<a name="461"></a>
+### 4.6.1. Setup the dataset
    - Navigate to the QuickSight dashboard and select the us-east-2 region
    - Click on Datasets
    - Click on New dataset
@@ -227,7 +244,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - Click Create data source
    - Click Visualize
    - Ensure Interactive sheet is selected and click Create
-### 2. Create visuals
+<a name="462"></a>
+### 4.6.2. Create visuals
    - Crete the following visuals:
    - Average of Temperature by RealTime:
        - X axis: realtime (SECOND)
@@ -238,7 +256,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
    - Average of Temperature_f by RealTime:
        - X axis: realtime (SECOND)
        - Y axisL temperature (Average)
-### 3. Refresh QuickSight data
+<a name="463"></a>
+### 4.6.3. Refresh QuickSight data
    - Manual refresh:
        - Navigate to the QuickSight console
        - Click on Datasets
@@ -250,7 +269,8 @@ https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot
             - Occurence: Daily
             - Start time: 23:59
             - Timezone: America/Toronto
-## SNS Notifications
+<a name="47"></a>
+## 4.7. SNS Notifications
 1. Creating a new SNS topic
    - Navigate to Amazon SNS console
    - Click Create topic
