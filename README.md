@@ -1,3 +1,4 @@
+# Table of contents
 [1. Description](#1)<br>
 [2. AWS Architecture diagram](#2)<br>
 [3. Hardware](#3)<br>
